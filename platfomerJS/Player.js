@@ -7,7 +7,7 @@ class Player extends Entity
         this.hasGravity = true;
         this.jumpPower = 250;
         this.isJumping = false;
-        this.speed = 200;
+        this.speed = 300;
         this.tileMap = null;
 
         this.invulnerable = false;
@@ -156,8 +156,12 @@ class Player extends Entity
 
     draw(context)
     {
-/*        context.fillStyle = 'blue'
+        /*context.fillStyle = 'blue'
         context.fillRect(this.position.x, this.position.y, this.w, this.h);*/
+        context.save();
+        context.shadowColor = 'blue'
+        context.shadowBlur = 10;
         this.animation.draw(context);
+        context.restore();
     }
 }

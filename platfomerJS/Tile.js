@@ -24,16 +24,16 @@ class Tile
         this.sprite = sprite;
     }
 
-    draw(context)
+    draw(context, offsetX, offsetY)
     {
         if (typeof this.sprite == "string")
         {
             context.fillStyle = this.sprite;
-            context.fillRect(this.position.x, this.position.y, this.w, this.h);
+            context.fillRect(this.position.x + offsetX, this.position.y + offsetY, this.w, this.h);
         }
         else
         {
-            context.drawImage(this.sprite, this.position.x, this.position.y, this.w, this.h);
+            context.drawImage(this.sprite, this.position.x + offsetX, this.position.y + offsetY, this.w, this.h);
         }
     }
 }

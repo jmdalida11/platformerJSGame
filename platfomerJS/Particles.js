@@ -70,6 +70,8 @@ class Particles
 
     draw(context)
     {
+        context.shadowColor = 'red';
+        context.shadowBlur = 10;
         context.fillStyle = this.sprite;
 
         for (let i=0; i<this.particles.length; ++i)

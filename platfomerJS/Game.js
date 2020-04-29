@@ -1,6 +1,3 @@
-const WIDTH = 960;
-const HEIGHT = 640;
-
 class Game
 {
     constructor(deltaTime = 1/60)
@@ -8,9 +5,9 @@ class Game
         this.canvas = document.createElement("canvas");
         this.context = this.canvas.getContext("2d");
 
-        this.canvas.width = WIDTH;
-        this.canvas.height = HEIGHT;
-        //this.canvas.style.border = '1px solid black';
+        this.canvas.width = Global.WIDTH;
+        this.canvas.height = Global.HEIGHT;
+        this.canvas.style.border = '5px solid black'
         document.body.append(this.canvas);
 
         this.deltaTime = deltaTime;

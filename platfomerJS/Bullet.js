@@ -4,6 +4,7 @@ class Bullet extends Entity
     {
         super(x, y, w, h);
         this.toRemove = false;
+        this.damage = 30;
     }
 
     collisionY(block)
@@ -32,6 +33,8 @@ class Bullet extends Entity
 
     draw(context)
     {
+        context.shadowColor = 'red';
+        context.shadowBlur = 10;
         if (this.toRemove) return;
         context.drawImage(this.sprite, this.position.x, this.position.y, this.w, this.h);
     }

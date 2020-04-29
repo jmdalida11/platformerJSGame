@@ -85,7 +85,7 @@ class PlayState extends State
 
     initPlayer()
     {
-        this.player = new Player(0, 0, 32, 48);
+        this.player = new Player(50, 100, 32, 48);
         this.player.setTileMap(this.tileMap);
         this.player.initAnimation(this.imageResources);
     }
@@ -98,22 +98,6 @@ class PlayState extends State
         enemy.setTileMap(this.tileMap);
         enemy.initAnimation(this.imageResources);
         this.enemies.push(enemy);
-    }
-
-    limitBoundery()
-    {
-        let playerPos = this.player.position;
-
-        if (playerPos.x < 0) this.player.position.x = 0;
-        if (playerPos.x + this.player.w > this.gsm.canvas.width)
-            this.player.position.x = this.gsm.canvas.width - this.player.w;
-
-        for (let enemy of this.enemies)
-        {
-            if (enemy.position.x < 0) enemy.position.x = 0;
-            if (enemy.position.x + enemy.position.w > this.gsm.canvas.width)
-                enemy.position.x = this.gsm.canvas.width - enemy.position.w;
-        }
     }
 
     addPlayerBullet(bullet)
@@ -138,14 +122,13 @@ class PlayState extends State
 
         for (let i=0; i<this.playerBullets.length; ++i)
         {
-            if (this.playerBullets[i].position.x > this.gsm.canvas.width || this.playerBullets[i].position.x < 0)
+            /*if (this.playerBullets[i].position.x > this.gsm.canvas.width || this.playerBullets[i].position.x < 0)
             {
-                this.addParticles(this.playerBullets[i].position.x, this.playerBullets[i].position.y, particlesSize, particlesSize, numOfParticles, 1);
                 this.playerBullets.splice(i, 1);
                 --i;
                 continue;
             }
-            else if (this.playerBullets[i].toRemove)
+            else */if (this.playerBullets[i].toRemove)
             {
                 this.addParticles(this.playerBullets[i].position.x, this.playerBullets[i].position.y, particlesSize, particlesSize, numOfParticles, 1);
                 this.playerBullets.splice(i, 1);
@@ -157,12 +140,17 @@ class PlayState extends State
             {
                 if (this.playerBullets[i].collide(this.enemies[j]))
                 {
+                    this.enemies[j].health -= this.playerBullets[i].damage;
                     this.addParticles(this.playerBullets[i].position.x, this.playerBullets[i].position.y, particlesSize, particlesSize, numOfParticles, 1);
-                    this.enemies.splice(j, 1);
                     this.playerBullets.splice(i, 1);
                     --i;
-                    --j;
-                    break;
+
+                    if (this.enemies[j].health <= 0)
+                    {
+                        this.enemies.splice(j, 1);
+                        --j;
+                        break;
+                    }
                 }
             }
         }
@@ -184,12 +172,21 @@ class PlayState extends State
             bullet.update(dt);
         }
 
-        this.limitBoundery();
         this.particles.update(dt);
     }
 
     draw(context)
     {
+        context.clearRect(-this.player.position.x, 0, this.gsm.canvas.width + this.player.position.x, this.gsm.canvas.height);
+        context.save();
+
+        let pos = this.player.position;
+
+        if (!(pos.x < Global.WIDTH/2))
+        {
+            context.translate(-pos.x + Global.WIDTH/2, 0);
+        }
+
         super.draw(context);
         this.tileMap.drawTiles(context);
 
@@ -206,5 +203,7 @@ class PlayState extends State
         }
 
         this.particles.draw(context);
+
+        context.restore();
     }
 }

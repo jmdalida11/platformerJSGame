@@ -55,6 +55,14 @@ class Animation
         this.y = y;
     }
 
+    getCurrentFrame()
+    {
+        if (!this.currentAction) return null;
+
+        let action = this.animations[this.currentAction];
+        return action.frames[action.index];
+    }
+
     update(dt)
     {
         if (this.currentAction == null) return;

@@ -7,6 +7,8 @@ class TileMap
         this.cols = lvl.cols;
         this.tileSize = lvl.tileSize;
         this.lvl = lvl;
+        this.x = 0;
+        this.y = 0;
     }
 
     initTiles()
@@ -36,18 +38,21 @@ class TileMap
 
     createTiles(lvl, row, col, index)
     {
+        let xPos = col * this.tileSize + this.x;
+        let yPos = row * this.tileSize + this.y;
+
         switch (lvl.tiles[index])
         {
             case 0:
             {
-                let sky = new Tile(col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
+                let sky = new Tile(xPos, yPos, this.tileSize+1, this.tileSize+1);
                 sky.setSprite('skyblue');
                 this.map[row][col] = sky;
                 break;
             }
             case 1:
             {
-                let ground = new Tile(col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
+                let ground = new Tile(xPos, yPos, this.tileSize, this.tileSize);
                 ground.setSprite(this.imageResources.getImage('ground'));
                 ground.setBlock(true);
                 this.map[row][col] = ground;
@@ -55,14 +60,14 @@ class TileMap
             }
             case 2:
             {
-                let grass = new Tile(col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
+                let grass = new Tile(xPos, yPos, this.tileSize, this.tileSize);
                 grass.setSprite('skyblue');
                 this.map[row][col] = grass;
                 break;
             }
             case 3:
             {
-                let portal = new Tile(col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize);
+                let portal = new Tile(xPos, yPos, this.tileSize, this.tileSize);
                 portal.setSprite('blue');
                 this.map[row][col] = portal;
                 break;
@@ -77,6 +82,7 @@ class TileMap
 
     getTile(row, col)
     {
+        if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return null;
         return this.map[row][col];
     }
 
@@ -87,7 +93,9 @@ class TileMap
             for (let col=0; col<this.cols; ++col)
             {
                 if (this.map[row][col])
-                    this.map[row][col].draw(context);
+                {
+                    this.map[row][col].draw(context, this.x, this.y);
+                }
             }
         }
     }
